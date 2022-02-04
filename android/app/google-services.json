@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "856619150338",
+    "project_id": "vadvisor-bbc54",
+    "storage_bucket": "vadvisor-bbc54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:856619150338:android:43958a6918ea1ca5478b1b",
+        "android_client_info": {
+          "package_name": "com.example.vibgyor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "856619150338-8aes8nip90sjlscbfb5604cqvfn3gj0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXDWwCHWhtIKnaJqK-J-C519uoPKzZ1-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "856619150338-8aes8nip90sjlscbfb5604cqvfn3gj0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
