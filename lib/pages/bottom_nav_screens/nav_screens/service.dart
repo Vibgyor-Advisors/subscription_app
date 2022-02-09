@@ -2,15 +2,24 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vibgyor/animation/rotationroute.dart';
 import 'package:vibgyor/pages/drawer_screens/navigation_drawer.dart';
 import 'package:vibgyor/models/servicemodel/servicemodel.dart';
 import 'package:vibgyor/pages/notification_page/notification.dart';
-import 'package:vibgyor/pages/payment/payment.dart';
+import 'package:vibgyor/pages/service_pages/diff_trades_details/health_checkup.dart';
 import 'package:vibgyor/pages/service_pages/diff_trades_details/intra_service_description.dart';
+import 'package:vibgyor/pages/service_pages/diff_trades_details/portfolio_services.dart';
+import 'package:vibgyor/pages/service_pages/diff_trades_details/positional_services.dart';
+import 'package:vibgyor/pages/service_pages/diff_trades_details/sectoral_service_description.dart';
+import 'package:vibgyor/pages/service_pages/diff_trades_details/swing_service_description.dart';
 
 class Services extends StatefulWidget {
-  const Services({Key? key}) : super(key: key);
+  final name;
+  final UID;
+
+  const Services({Key? key, required this.name, required this.UID,}) : super
+      (key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,17 +29,24 @@ class Services extends StatefulWidget {
 }
 
 class _Services extends State<Services> {
-  /* Stores Data Provided by API */
   List<ServiceModel> serviceModelList = <ServiceModel>[];
   bool isLoading = true; // Check API Loading state if it is not loaded it
   // will show circular progress circle
   late Map data; // stores response body from API
+  var uuid = Uuid();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getHomeData();
+    setState(() {});
+  }
 
   getHomeData() async {
     /* Call API to GET Data  */
     Map element;
     String url =
-        "https://globaltechnolabs.com/VibyorLoanCRM/api/subscription/trade-plans.php";
+        "https://www.jupitertouchlab.co.in/subscription/api/trade_plans.php";
     http.Response response = await get(Uri.parse(url));
     data = jsonDecode(response.body);
     setState(() {
@@ -50,11 +66,48 @@ class _Services extends State<Services> {
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getHomeData();
+  Future makePay(
+      String UUID,
+    String cus_name,
+    String planId,
+    String planName,
+    String planPrice,
+    String startDate,
+    String endDate,
+    String val,
+  ) async {
+    /* Call API to GET and CHECK if USER is correct */
+    var URL = Uri.parse(
+        "https://www.jupitertouchlab.co.in/vibgyor/api/subscription/subsc_order.php");
+    http.Response response = await http.post(URL,
+        body: jsonEncode(<String, String>{
+          "uid": UUID.toString(),
+          "order_id": uuid.v1().toString(),
+          "cust_name": cus_name.toString(),
+          "plan_id": planId,
+          "plan_name": planName,
+          "plan_price": planPrice,
+          "start_date": startDate,
+          "end_date": endDate,
+          "validity": val
+        }));
+
+    print(response.body);
+    setState(() {
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        print(response.body);
+        if (data["ResponseCode"] == '200') {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(data["ResponseMsg"]),
+          ));
+        } else if (data["ResponseCode"] == '401') {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(data["ResponseMsg"]),
+          ));
+        }
+      }
+    });
   }
 
   @override
@@ -245,8 +298,37 @@ class _Services extends State<Services> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        SizeRoute(widget: const IntraServicesDescription()));
+                    if (serviceModelList[index].name.toString() ==
+                        'Intraday Trade') {
+                      Navigator.push(context,
+                          SizeRoute(widget: const IntraServicesDescription()));
+                    } else if (serviceModelList[index].name.toString() ==
+                        'Swing '
+                            'Trade') {
+                      Navigator.push(context,
+                          SizeRoute(widget: SwingServicesDescription()));
+                    } else if (serviceModelList[index].name.toString() ==
+                        'Secto'
+                            'ral Trade'
+                            '') {
+                      Navigator.push(context,
+                          SizeRoute(widget: SectoralServicesDescription()));
+                    } else if (serviceModelList[index].name.toString() ==
+                        'Posi'
+                            'tional Trade') {
+                      Navigator.push(context,
+                          SizeRoute(widget: const PositionalServices()));
+                    } else if (serviceModelList[index].name.toString() ==
+                        'Port'
+                            'folio Ideas') {
+                      Navigator.push(context,
+                          SizeRoute(widget: const PortfolioServices()));
+                    } else if (serviceModelList[index].name.toString() ==
+                        'Portf'
+                            'olio') {
+                      Navigator.push(
+                          context, SizeRoute(widget: const HealthCheckUp()));
+                    }
                   },
                   child: const Text(
                     'Details',
@@ -258,24 +340,29 @@ class _Services extends State<Services> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                MaterialButton(
-                  /* BUY NOW button */
-                  elevation: 8,
-                  hoverElevation: 50,
-                  splashColor: Colors.lightBlue.shade500,
-                  color: Colors.lightBlue.shade300,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                    18,
-                  )),
-                  onPressed: () {
-                    Navigator.push(context, SizeRoute(widget: Payment()));
+                InkWell(
+                  onTap: () {
+                    var newName =serviceModelList[index].name.substring(0,
+                        (serviceModelList[index].name).length-5).toUpperCase();
+                    makePay(
+                      widget.UID,
+                        widget.name,
+                        '${serviceModelList[index].id}',
+                        newName,
+                        '${serviceModelList[index].cost}',
+                        '${serviceModelList[index].timeStamp}',
+                        '${serviceModelList[index].timeStamp}',
+                        '${serviceModelList[index].status}');
                   },
-                  child: const Text(
-                    'Buy Now',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  child: Text(
+                    "Buy",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.lightBlue,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
-                ),
+                )
               ],
             )
           ],

@@ -1,11 +1,12 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'nav_screens/contact.dart';
 import 'nav_screens/home.dart';
 import 'nav_screens/service.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({Key? key}) : super(key: key);
+  final name;
+  final UID;
+  const BottomNavigation({Key? key, this.name, this.UID}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,40 +20,10 @@ class _BottomNavigation extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     var screens = [
       // Stores different screens to show in Bottom_Nav_Bar
-      Services(),
+      Services(UID: widget.UID, name: widget.name,),
       Home(),
       Contact(),
     ];
-/*    final items = <Widget>[
-      const Icon(
-        Icons.bar_chart,
-        size: 30,
-      ),
-      const Icon(
-        Icons.home_filled,
-        size: 30,
-      ),
-      const Icon(
-        Icons.contact_page,
-        size: 30,
-      ),
-    ];*/
-
-/*    return Scaffold(
-        extendBody: true,
-        body: screens[index],
-        bottomNavigationBar: Theme(
-          data: Theme.of(context)
-              .copyWith(iconTheme: const IconThemeData(color: Colors.white)),
-          child: CurvedNavigationBar(
-            backgroundColor: Colors.transparent,
-            items: items,
-            index: index,
-            height: 45,
-            color: Colors.grey,
-            onTap: (index) => setState(() => this.index = index),
-          ),
-        ));*/
 
   return Scaffold(
     body: Container(
@@ -79,8 +50,8 @@ class _BottomNavigation extends State<BottomNavigation> {
       destinations: const [
         NavigationDestination(
           icon: Icon(Icons.bar_chart_rounded),
-          label: 'Service',
-          selectedIcon: Icon(Icons.miscellaneous_services_rounded),
+          label: 'Trades',
+          selectedIcon: Icon(Icons.track_changes_rounded),
         ),
         NavigationDestination(
           icon: Icon(Icons.home_filled),

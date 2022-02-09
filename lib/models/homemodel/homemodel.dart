@@ -17,6 +17,8 @@ class HomeModel {
   late String timeFrame;
   late String gainLoss;
   late String valWtGainLoss;
+  late String closeData;
+  late String currentStatus;
   HomeModel({
     this.date="Date",
     this.reco="RECO",
@@ -35,6 +37,8 @@ class HomeModel {
     this.timeFrame="IntraDay",
     this.gainLoss='1',
     this.valWtGainLoss="_",
+    this.currentStatus="CURR",
+    this.closeData="CLODATA"
   });
 
   factory HomeModel.fromMap(Map json) {
@@ -42,8 +46,7 @@ class HomeModel {
       date: json['date'],
       reco: json['reco'],
       segment: json['segment'],
-      stkName: json['stock_name']
-      ,
+      stkName: json['stock_name'],
       cmp: json['cmp'],
       entryRange: json['entry_range'],
       stopLoss: json['stoploss'],
@@ -57,6 +60,8 @@ class HomeModel {
       timeFrame: json['time_frame'],
       gainLoss: json['gain_loss'],
       valWtGainLoss: json['valuewise_gain_loss'],
+      currentStatus: json['current_status'],
+      closeData: json['close_date']
     );
   }
 

@@ -1,16 +1,18 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vibgyor/animation/rotationroute.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:vibgyor/animation/bouncyanimation.dart';
+import 'package:vibgyor/pages/details_pages/buyed_plans/intradayplan.dart';
+import 'package:vibgyor/pages/details_pages/buyed_plans/portfolioplan.dart';
+import 'package:vibgyor/pages/details_pages/buyed_plans/positional_plan.dart';
+import 'package:vibgyor/pages/details_pages/buyed_plans/sectrolplan.dart';
+import 'package:vibgyor/pages/details_pages/buyed_plans/swingplan.dart';
 import 'package:vibgyor/pages/drawer_screens/navigation_drawer.dart';
-import 'package:vibgyor/models/homemodel/homemodel.dart';
-import 'package:vibgyor/pages/home_page_extra_details/detail%20page.dart';
 import 'package:vibgyor/pages/notification_page/notification.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key,}) : super(key: key);
+  const Home({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,57 +22,21 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  late SharedPreferences logindata;
-  String uid='';
+  Future<void> secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
+    secureScreen();
     super.initState();
-    initial();
-    postHomeData();
-  }
-  void initial() async {
-    logindata = await SharedPreferences.getInstance();
-    setState(() {
-      uid = logindata.getString('uid')!;
-    });
   }
 
-  List<HomeModel> homeModelList = <HomeModel>[];
-  bool isLoading = true;
-  Future postHomeData() async {
-    /* Call API to POST data inputted by USER */
-    var URL = Uri.parse("https://www.jupitertouchlab.co.in/vibgyor/api/subscription/stock_data.php");
-
-    http.Response response = await http.post(URL,
-        body: jsonEncode(<String, String>{
-          "uid":'"$uid"',
-          "timeframe": 'INTRADAY',
-        }));
-    print(response.body);
-    Map data = jsonDecode(response.body);
-    setState(() {
-      for (Map element in data["data"]) {
-        try {
-          HomeModel homeModel = HomeModel();
-          homeModel = HomeModel.fromMap(element);
-          homeModelList.add(homeModel);
-          print(homeModelList);
-          setState(() {
-            isLoading = false;
-          });
-        } catch (e) {
-          print('in catch:  ${e}');
-        }
-        ;
-      }
-    });
-
-    /* Just to Debug \|/ */
-    /*debugPrint("Response: " + response.body.toString());
-    debugPrint("Status: " + (response.statusCode).toString());*/
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,174 +65,219 @@ class _Home extends State<Home> {
           backgroundColor: Colors.grey,
         ),
         drawer: const NavigationDrawer(),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-            shrinkWrap: true,
-            itemCount: homeModelList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return buildCard(context, index);
-            }));
-  }
-
-  Widget buildCard(BuildContext context, int index) {
-    return Card(
-      elevation: 16,
-
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  homeModelList[index].timeFrame,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 29),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-
-                  'Stock Name',
-                  style: TextStyle(
-                      color: Colors.grey.shade500, fontWeight: FontWeight.w900),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  homeModelList[index].stkName,
-                  style: const TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                Chip(
-                  elevation: 8,
-                  shadowColor: Colors.lightBlue.shade300,
-                  backgroundColor: Colors.lightBlue.shade200,
-                  label: Text(
-                    homeModelList[index].date,
-                    style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          BouncyAnimation(
+                              widget: const IndradayPlan(
+                                  /*
+                                Navigate to SignUp Page -> */
+                                  )));
+                    },
+                    child: SizedBox(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadowColor: Colors.black,
+                          elevation: 16,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Intraday',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 22),
+                                ),
+                                Icon(Icons.chevron_right)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 14,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Segment',
-                  style: TextStyle(
-                      color: Colors.grey.shade500, fontWeight: FontWeight.w900),
-                ),
-                Text(
-                  'Close Price',
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.w900,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          BouncyAnimation(
+                              widget: const PortfolioPlan(
+                                  /*
+                                Navigate to SignUp Page -> */
+                                  )));
+                    },
+                    child: SizedBox(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadowColor: Colors.black,
+                          elevation: 16,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Portfolio',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 22),
+                                ),
+                                Icon(Icons.chevron_right)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  homeModelList[index].segment.toString(),
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '₹ ${homeModelList[index].closePrice.toString()}',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Entry Range',
-                  style: TextStyle(
-                      color: Colors.grey.shade500, fontWeight: FontWeight.w900),
-                ),
-                Text(
-                  'RECO',
-                  style: TextStyle(
-                      color: Colors.grey.shade500, fontWeight: FontWeight.w900),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  homeModelList[index].entryRange,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  homeModelList[index].reco,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        SizeRoute(
-                            widget: DetailsPage(
-                                cmp: homeModelList[index].cmp.toString(),
-                                stopLoss: homeModelList[index].stopLoss,
-                                status: homeModelList[index].status,
-                                target2: homeModelList[index].target2,
-                                target1: homeModelList[index].target1,
-                                valGainLoss: homeModelList[index].valWtGainLoss,
-                                suggExpo: homeModelList[index].suggExpo,
-                                gainLoss: homeModelList[index].gainLoss,
-                                duration: homeModelList[index].duration)));
-                  },
-                  child: const Text(
-                    'Details',
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontFamily: 'Montserrat',
-                        color: Colors.lightBlue,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          BouncyAnimation(
+                              widget: const SectrolPlan(
+                                  /*
+                                Navigate to SignUp Page -> */
+                                  )));
+                    },
+                    child: SizedBox(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadowColor: Colors.black,
+                          elevation: 16,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Sectoral',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 22),
+                                ),
+                                Icon(Icons.chevron_right)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          BouncyAnimation(
+                              widget: const PositionalPlan(
+                                  /*
+                                Navigate to SignUp Page -> */
+                                  )));
+                    },
+                    child: SizedBox(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadowColor: Colors.black,
+                          elevation: 16,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Positional',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 22),
+                                ),
+                                Icon(Icons.chevron_right)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          BouncyAnimation(
+                              widget: const SwingPlan(
+                                  /*
+                                Navigate to SignUp Page -> */
+                                  )));
+                    },
+                    child: SizedBox(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadowColor: Colors.black,
+                          elevation: 16,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Swing',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 22),
+                                ),
+                                Icon(Icons.chevron_right)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 }

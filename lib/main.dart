@@ -1,62 +1,65 @@
 // @dart=2.9
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:vibgyor/pages/drawer_screens/navigation_drawer.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibgyor/pages/bottom_nav_screens/bottom_nav.dart';
 import 'package:vibgyor/pages/welcome_page/welcome.dart';
 
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title // description
+    importance: Importance.high,
+    playSound: true);
+
+// firebase background message handler
+Future<void> _messageHandler(RemoteMessage event) async {
+  print('background message ${event.notification?.body}');
+}
 void main() async {
-  /* Initializing Firebase */
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  FirebaseMessaging.onBackgroundMessage(_messageHandler);
+
+  FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
+    final pref = await SharedPreferences.getInstance();
+    final String firebaseTokenPrefKey = 'Token';
+    final String currentToken = pref.getString(firebaseTokenPrefKey);
+    if (currentToken != token) {
+      print('Token: ' + token);
+      // add code here to do something with the updated token
+      await pref.setString(firebaseTokenPrefKey, token);
+    }
+    print('Token: ' + token);
+  });
+
+/*  FirebaseMessaging.instance.getToken().then((value) async {
+    token = await SharedPreferences.getInstance();
+    token.setString('Token', value.toString());
+    print('TOKEN:::$value');
+  });*/
+  SharedPreferences sharedPref = await SharedPreferences.getInstance();
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  final SharedPreferences sharedPref;
+  const MyApp({Key key, this.sharedPref}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.black),
       debugShowCheckedModeBanner: false,
-      title: "Vibgyor",
-      home: MyMainPage(/* Navigation to MainPage-> */),
+      title: "Vibgyor Equity",
+      home: const Welcome(/* Navigation to MainPage-> */),
     );
-  }
-}
-
-class MyMainPage extends StatefulWidget {
-  const MyMainPage({Key key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _MyMainPage();
-  }
-}
-
-class _MyMainPage extends State<MyMainPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.grey,
-      body: Welcome(/* Navigation to Welcome Page-> */),
-      drawer: NavigationDrawer(/* Navigation to Drawer-> */),
-    );
-  }
-}
-
-class LogoMain extends StatelessWidget {
-  /* Image Containing */
-  const LogoMain({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    AssetImage assetImage = const AssetImage("images/vibgyor_logo.jfif");
-    Image image = Image(
-      image: assetImage,
-      width: 70,
-      height: 70,
-    );
-    return Container(padding: EdgeInsets.zero, child: image);
   }
 }

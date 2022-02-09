@@ -1,11 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vibgyor/models/loginModel/loginmodel.dart';
-import 'package:vibgyor/models/usermodel/user.dart';
 import 'package:vibgyor/pages/notification_page/notification.dart';
+import 'package:vibgyor/storage/securestorage.dart';
 
 import '../navigation_drawer.dart';
 
@@ -18,36 +15,42 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool isLoading = true;
-  late SharedPreferences userDetails;
-  String email = '';
-  String bank_acc_no = '';
-  String uid = '';
-  String bank_name = '';
-  String contact = '';
-  var userData;
+  String Email = '';
+  String Uid = '';
+  String Name = '';
+  String Contact = '';
+  String bankName = '';
+  String bankAccNo = '';
+  String ifscCode = '';
+  String bankBranch = '';
+  String Location = '';
+  String panNo = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initial();
+    init();
   }
 
-  void initial() async {
-    userDetails = await SharedPreferences.getInstance();
-    setState(() {
-      email = userDetails.getString('userName')!;
-      bank_acc_no = userDetails.getString('bank_acc_no')!;
-      uid = userDetails.getString('uId')!;
-      bank_name = userDetails.getString('bank_name')!;
-      contact = userDetails.getString('contact')!;
-    });
+  Future init() async {
+    final SecureStorage secureStorage = SecureStorage();
+    Email = await secureStorage.readSecureData('Email');
+    Uid = await secureStorage.readSecureData('Uid');
+    Name = await secureStorage.readSecureData('Name');
+    Contact = await secureStorage.readSecureData('Contact');
+    bankName = await secureStorage.readSecureData('bankName');
+    bankAccNo = await secureStorage.readSecureData('bankAccNo');
+    ifscCode = await secureStorage.readSecureData('ifscCode');
+    bankBranch = await secureStorage.readSecureData('bankBranch');
+    Location = await secureStorage.readSecureData('Location');
+    panNo = await secureStorage.readSecureData('panNo');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey.shade400,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: Builder(
             builder: (context) => IconButton(
@@ -73,114 +76,245 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Colors.grey,
         ),
         drawer: const NavigationDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 38.0),
-          child: Center(
-            child: Column(
-              children: [
-                const Text(
-                  'User Details',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Schyler',
-                      fontSize: 30),
-                ),
-                Text(
-                  email,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 25,
-                      color: Colors.black),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  color: Colors.white,
-                  height: 500,
-                  width: 300,
-                  child: Padding(
-                    padding: const EdgeInsets.all(26.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Email ID: ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 38.0),
+            child: Center(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'User Details',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Schyler',
+                        fontSize: 26),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(26.0),
+                      child: SizedBox(
+                        width: 400,
+                        height: 700,
+                        child: Card(
+                          elevation: 20,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 18,
+                              ),
+                              Text(
+                                'Name',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                (Name == null) ? 'name' : Name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                  indent: 58,
+                                ),
+                              ),
+                              const Text(
+                                'Unique ID: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                Uid,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                  endIndent: 58,
+                                ),
+                              ),
+                              const Text(
+                                'Email: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                Email,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  indent: 58,
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                ),
+                              ),
+                              const Text(
+                                'Bank Account Number: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                bankAccNo,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  endIndent: 59,
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                ),
+                              ),
+                              const Text(
+                                'Mobile No: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                Contact,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  indent: 58,
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                ),
+                              ),
+                              const Text(
+                                'Bank Name: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                bankName,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  endIndent: 58,
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                ),
+                              ),
+                              const Text(
+                                'IFSC Code: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                ifscCode,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  indent: 58,
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                ),
+                              ),
+                              const Text(
+                                'Location: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                Location,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 23,
+                                child: Divider(
+                                  height: 6,
+                                  color: Colors.grey.shade500,
+                                  thickness: 1,
+                                  endIndent: 58,
+                                ),
+                              ),
+                              const Text(
+                                'Branch Name: ',
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                bankBranch,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          email,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 25,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        const Text(
-                          'Unique ID: ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          uid,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 25,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        const Text(
-                          'Bank Account Number: ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          bank_acc_no,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 25,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        const Text(
-                          'Mobile No: ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          contact,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 25,
-                              color: Colors.black),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        const Text(
-                          'Bank Name: ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          bank_name,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 25,
-                              color: Colors.black),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ));

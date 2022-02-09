@@ -4,6 +4,7 @@ import 'package:vibgyor/pages/drawer_screens/navigation_drawer.dart';
 import 'package:vibgyor/pages/notification_page/notification.dart';
 import 'package:vibgyor/pages/payment/payment.dart';
 
+
 class IntraServicesDescription extends StatefulWidget {
   const IntraServicesDescription({Key? key}) : super(key: key);
 
@@ -197,7 +198,9 @@ class _IntraServicesDescription extends State<IntraServicesDescription> {
                         child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
-                                  context, BouncyAnimation(widget: Payment()));
+                                  context, BouncyAnimation(widget: Payment
+                                (startDate: "20/01/2022", planName: 'INTRADAY',
+                                endDate: "20/02/2022", val: "1", planPrice: "3000",)));
                             },
                             child: const Text("Buy Now")))
                   ],

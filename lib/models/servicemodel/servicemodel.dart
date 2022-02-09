@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class ServiceModel {
   late String name;
+  late String id;
   late String tag;
   late String detail;
   late String cost;
@@ -13,6 +14,7 @@ class ServiceModel {
   ServiceModel(
       {this.name = "NAME",
         this.img = "Img",
+        this.id = "ID",
       this.tag = "TAG",
       this.detail = "DETAIL",
       this.cost = "5000",
@@ -23,6 +25,7 @@ class ServiceModel {
   factory ServiceModel.fromMap(Map json) {
     return ServiceModel(
         name: json["name"],
+        id: json["id"],
         img: json["image"],
         tag: json["tagline"],
         detail: json['details'],

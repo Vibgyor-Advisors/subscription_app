@@ -237,7 +237,8 @@ class _PositionalServicesDescription extends State<PositionalServices> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Payment()));
+                                    builder: (context) => Payment(startDate: "20/01/2022", planName: 'INTRADAY',
+                                      endDate: "20/02/2022", val: "1", planPrice: "3000",)));
                           },
                           child: const Text("Buy Now"))
                     )

@@ -58,7 +58,7 @@ class Settings extends StatelessWidget{
                     ),
                   ],
                 ),
-                Row(
+                /*Row(
                   children: [
                     const Text(
                         "Notification Pop Up",
@@ -70,7 +70,7 @@ class Settings extends StatelessWidget{
                     const SizedBox(width: 100,),
                     Switch(value: false, onChanged: (value){})
                   ],
-                ),
+                ),*/
                 /*Row(
                   children: [
                     const Text(

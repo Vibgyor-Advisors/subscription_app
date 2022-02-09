@@ -58,7 +58,7 @@ class _HealthCheckUpServicesDescription extends State<HealthCheckUp> {
                     const Padding(
                       padding: EdgeInsets.only(top:18, bottom: 19),
                       child: Text(
-                        "Portfolio Health Check Up",
+                        "Portfolio",
                         style: TextStyle(
                             fontSize: 30.0,
                             fontWeight: FontWeight.bold,
@@ -250,7 +250,8 @@ class _HealthCheckUpServicesDescription extends State<HealthCheckUp> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Payment()));
+                                    builder: (context) => Payment(startDate: "20/01/2022", planName: 'INTRADAY',
+                                      endDate: "20/02/2022", val: "1", planPrice: "3000",)));
                           },
                           child: const Text("Buy Now")),
                     )

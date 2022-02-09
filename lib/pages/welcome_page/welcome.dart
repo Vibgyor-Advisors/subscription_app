@@ -20,30 +20,36 @@ class Welcome extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.only(right: 190, top: 180.0),
-                child: Logo(/* Defined Below */),
+                padding: const EdgeInsets.only(top: 220.0),
+                child: Column(
+                  children: const [
+                    Logo(/* Defined Below */),
+                    Text(
+                      "Equity",
+                      style: TextStyle(fontSize: 45.0),
+                    ),
+                    Text(
+                      "by Vibgyor Advisor",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            /* const Center(
+              child: Padding(
+                padding: EdgeInsets.zero,
+                child:
               ),
             ),
             const Center(
               child: Padding(
                 padding: EdgeInsets.zero,
-                child: Text(
-                  "Equity Advisor",
-                  style: TextStyle(fontSize: 50.0),
-                ),
+                child:
               ),
-            ),
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.zero,
-                child: Text(
-                  "by Vibgyor Advisor",
-                  style: TextStyle(fontSize: 30.0),
-                ),
-              ),
-            ),
+            ),*/
             Padding(
               padding: const EdgeInsets.only(top: 190.0, left: 150),
               child: GestureDetector(

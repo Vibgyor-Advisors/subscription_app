@@ -40,7 +40,7 @@ class _Contact extends State<Contact> {
 
   Future userContact() async {
     /* Call API to POST data inputted by USER */
-    var URL = Uri.parse("https://www.jupitertouchlab.co.in/vibgyor/api/subscription/contactus.php");
+    var URL = Uri.parse("https://www.jupitertouchlab.co.in/subscription/api/contactus.php");
 
     http.Response response = await http.post(URL,
         body: jsonEncode(<String, String>{
@@ -134,12 +134,11 @@ class _Contact extends State<Contact> {
                 padding:
                     const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
                 child: TextField(
-                  controller: userId,
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
                     labelText: "User id",
-                    hintText: "User Id",
+                    hintText: uid,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: const BorderSide(

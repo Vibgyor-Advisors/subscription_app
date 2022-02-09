@@ -35,60 +35,27 @@ class _TermsAndCondition extends State<TermsAndCondition> {
                 /* Image And Text */
                 padding: const EdgeInsets.only(top: 40.0),
                 child: Column(
-                  children: const <Widget>[
-                    /*Center(
-                      child: Image.asset('images/logo.png'),
-                    ),*/
+                  children: <Widget>[
                     Center(
+                      child: Image.asset('images/logo.png'),
+                    ),
+                    const Center(
                         child: Text(
                       'Vibgyor',
                       style:
-                          TextStyle(fontWeight: FontWeight.w900, fontSize: 30),
+                          TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
                     )),
-                    Center(
+                    const Center(
                         child: Text(
                       'Advisors',
                       style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                     )),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(14.0, 20, 14, 25),
-                child: Column(
-                  children: [
-                    TextField(
-                      /* Email / Phone Number */
-                      keyboardType: TextInputType.emailAddress,
-                      controller: phoneNumber,
-                      decoration: const InputDecoration(
-                          labelText: 'Contact',
-                          labelStyle: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
-                    ),
-                    const SizedBox(height: 20.0),
-                    TextField(
-                      /* PassWord */
-                      controller: panNumber,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      decoration: const InputDecoration(
-                          labelText: 'Pan Number',
-                          labelStyle: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
-                    ),
-                  ],
-                ),
+              const SizedBox(
+                height: 40,
               ),
               Padding(
                 /* For check Box  and terms and conditions */
@@ -189,7 +156,7 @@ class _TermsAndCondition extends State<TermsAndCondition> {
                         Navigator.pushReplacement(
                             context,
                             BouncyAnimation(
-                                widget: BottomNavigation(
+                                widget: const BottomNavigation(
                                     /*
                             Navigate to Main Screen */
                                     )));

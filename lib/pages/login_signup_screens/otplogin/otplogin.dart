@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:vibgyor/pages/bottom_nav_screens/bottom_nav.dart';
+import 'package:vibgyor/pages/term_and_cond_page/terms_and_condition.dart';
 
 class LoginScreen extends StatefulWidget {
-  final String uid;
-  const LoginScreen({Key? key, required this.uid})
+  final number;
+  const LoginScreen({Key? key, required this.number})
       : super(key: key);
 
   @override
@@ -23,6 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      widget.number;
+    });
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -42,12 +45,12 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               TextField(
                 /* Phone Number TextField */
-                controller: phoneController,
-                decoration: const InputDecoration(
+                controller: phoneController=widget.number,
+                decoration: InputDecoration(
                   hintText: 'Phone Number',
                   prefix: Padding(
                     padding: EdgeInsets.all(4),
-                    child: Text('+91'),
+                    child: Text("+91 "),
                   ),
                 ),
                 maxLength: 10,
@@ -111,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
 /* Check Phone Number Through Firebase */
   void loginWithPhone() async {
     auth.verifyPhoneNumber(
-      phoneNumber: "+91" + phoneController.text,
+      phoneNumber: "+91" +phoneController.text,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential).then((value) {
           print("You are logged in successfully");
@@ -152,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => BottomNavigation(),
+            builder: (context) => TermsAndCondition(),
           ),
         );
       },

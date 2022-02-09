@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibgyor/pages/bottom_nav_screens/nav_screens/contact.dart';
@@ -16,23 +15,16 @@ class NavigationDrawer extends StatefulWidget {
 
 class _NavigationDrawerState extends State<NavigationDrawer> {
   late SharedPreferences logindata;
-  late String username;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initial();
   }
+
   void initial() async {
     logindata = await SharedPreferences.getInstance();
-    setState(() {
-      username = logindata.getString('userName')!;
-    });
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +43,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   height: 50,
                 ),
                 buildMenuItem(
-                    text: "User id",
+                    text: "My account",
                     icon: Icons.account_circle,
                     onClicked: () => selectedItem(context, 0)),
                 const SizedBox(
@@ -75,6 +67,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                     text: "About us",
                     icon: Icons.accessibility_sharp,
                     onClicked: () => selectedItem(context, 4)),
+                const SizedBox(
+                  height: 246,
+                ),
                 MaterialButton(
                   elevation: 10,
                   hoverElevation: 58,
@@ -86,8 +81,8 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   onPressed: () {
                     logindata.setBool('login', true);
                     Navigator.pushReplacement(context,
-                        new MaterialPageRoute(builder: (context) => Login()));
-                    },
+                        MaterialPageRoute(builder: (context) => const Login()));
+                  },
                   child: const Text(
                     'LogOut',
                     style: TextStyle(
@@ -129,7 +124,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     switch (index) {
       case 0:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => const ProfilePage()));
+            .push(MaterialPageRoute(builder: (context) => ProfilePage()));
         break;
       case 2:
         Navigator.of(context)

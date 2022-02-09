@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vibgyor/pages/drawer_screens/navigation_drawer.dart';
 import 'package:vibgyor/pages/notification_page/notification.dart';
@@ -192,7 +191,8 @@ class _SectoralServicesDescription extends State<SectoralServicesDescription> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Payment()));
+                                    builder: (context) => Payment(startDate: "20/01/2022", planName: 'INTRADAY',
+                                      endDate: "20/02/2022", val: "1", planPrice: "3000",)));
                           },
                           child: const Text("Buy Now"))
                     )
