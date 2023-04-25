@@ -42,31 +42,32 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 const SizedBox(
                   height: 50,
                 ),
+          
                 buildMenuItem(
-                    text: "My account",
-                    icon: Icons.account_circle,
+                    text: "My Plans",
+                    icon: Icons.playlist_add_check,
                     onClicked: () => selectedItem(context, 0)),
                 const SizedBox(
                   height: 16,
                 ),
-                buildMenuItem(
-                    text: "Settings",
-                    icon: Icons.settings,
-                    onClicked: () => selectedItem(context, 2)),
+                   buildMenuItem(
+                    text: "My Notifications",
+                    icon: Icons.notifications,
+                    onClicked: () => selectedItem(context, 1)),
                 const SizedBox(
                   height: 16,
                 ),
                 buildMenuItem(
                     text: "Help & Support",
                     icon: Icons.help_center,
-                    onClicked: () => selectedItem(context, 3)),
+                    onClicked: () => selectedItem(context, 2)),
                 const SizedBox(
                   height: 16,
                 ),
                 buildMenuItem(
                     text: "About us",
                     icon: Icons.accessibility_sharp,
-                    onClicked: () => selectedItem(context, 4)),
+                    onClicked: () => selectedItem(context, 3)),
                 const SizedBox(
                   height: 246,
                 ),
